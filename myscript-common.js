@@ -5,7 +5,7 @@ function ruPinyinTextToArray(text) {
 const removeLinks = x => x.replace(/<link>[^<]*<\/link>/g, '')
 
 const asyncLoadInfoAndText = () => Promise.all([
-  fetch('files/anki-addon-glossary.json').then(x => x.json()),
+  fetch('files/anki.json').then(x => x.json()),
   fetch(`ru-pinyin.txt`).then(x => x.text()),
 ])
 
