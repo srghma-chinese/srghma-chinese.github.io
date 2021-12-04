@@ -1,0 +1,10 @@
+.nightMode {
+  color: white;
+  background-color: #2c2c2c;
+}
+a { text-decoration: none; }
+a:link { color: #ffffff; }
+a:visited { color: #900060; }
+
+body { display: flex; }
+#container-right { width: 80%; }
