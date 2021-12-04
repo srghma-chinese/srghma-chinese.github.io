@@ -4,6 +4,11 @@ function ruPinyinTextToArray(text) {
 
 const removeLinks = x => x.replace(/<link>[^<]*<\/link>/g, '')
 
+const asyncLoadInfoAndText = () => Promise.all([
+  fetch('files/anki-addon-glossary.json').then(x => x.json()),
+  fetch(`ru-pinyin.txt`).then(x => x.text()),
+])
+
 function recomputeCacheAndThrowIfDuplicate(ruPinyinArray) {
   const arrayOfValuesToObject = ({ arrayOfKeysField, valueField, array }) => {
     const buffer = {}

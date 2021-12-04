@@ -100,10 +100,7 @@ const containerId = 'kanjiIframeContainer'
 })();
 
 ;(async function() {
-  const [allHanziAnkiInfo, ruPinyinText] = await Promise.all([
-    fetch('anki-addon-glossary/anki-addon-glossary.json').then(x => x.json()),
-    fetch(`ru-pinyin.txt`).then(x => x.text()),
-  ])
+  const [allHanziAnkiInfo, ruPinyinText] = await asyncLoadInfoAndText()
 
   if (window.location.pathname.replace('.html', '') === "/h" && window.location.hash) {
     const hanziEncoded = window.location.hash.slice(1)

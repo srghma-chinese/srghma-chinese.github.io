@@ -41,10 +41,7 @@ const t = tag
 // )
 
 ;(async function() {
-  let [allHanziAnkiInfo, ruPinyinText] = await Promise.all([
-    fetch('anki-addon-glossary/anki-addon-glossary.json').then(x => x.json()),
-    fetch(`ru-pinyin.txt`).then(x => x.text()),
-  ])
+  let [allHanziAnkiInfo, ruPinyinText] = await asyncLoadInfoAndText()
 
   let ruPinyinArray = ruPinyinTextToArray(ruPinyinText)
 
