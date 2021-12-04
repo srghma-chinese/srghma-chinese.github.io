@@ -18,11 +18,11 @@ pre {
   width: 100%;
 }
 
-@font-face { font-family: HanaMin; src: url('fonts/NotoSans-Medium.ttf'), url('fonts/NotoSansSC-Regular.otf'), url('fonts/HanaMinA.ttf'), url('fonts/HanaMinB.ttf'), url('fonts/HanaMinC.ttf'), url('fonts/HanaMinI.ttf'); }
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&family=Noto+Sans+SC&family=Noto+Sans+TC&display=swap');
 
-@font-face { font-family: Noto; src: url('fonts/NotoSans-Medium.ttf'), url('fonts/NotoSansSC-Regular.otf'), url('fonts/NotoSerifCJK.ttc'); }
-@font-face { font-family: TH-Tshyn; src: url('fonts/TH-Tshyn-P0-1000.ttf'), url('fonts/TH-Tshyn-P1-1000.ttf'), url('fonts/TH-Tshyn-P2-1000.ttf'), url('fonts/TH-Tshyn-P16-1000.ttf'); }
-@font-face { font-family: yugothb; src: url('fonts/HanaMinA.ttf'), url('fonts/HanaMinB.ttf'), url('fonts/HanaMinC.ttf'), url('fonts/HanaMinI.ttf'); }
+@font-face { font-family: HanaMin; src: url('https://srghma-chinese-files.github.io/fonts/HanaMinA.ttf'), url('https://srghma-chinese-files.github.io/fonts/HanaMinB.ttf'), url('https://srghma-chinese-files.github.io/fonts/HanaMinC.ttf'), url('https://srghma-chinese-files.github.io/fonts/HanaMinI.ttf'); }
+
+/* @font-face { font-family: TH-Tshyn; src: url('fonts/TH-Tshyn-P0-1000.ttf'), url('fonts/TH-Tshyn-P1-1000.ttf'), url('fonts/TH-Tshyn-P2-1000.ttf'), url('fonts/TH-Tshyn-P16-1000.ttf'); } */
 @font-face { font-family: CNstrokeorder; src: url('fonts/CNstrokeorder.ttf'); }
 @font-face { font-family: KanjiStrokeOrders; src: url('fonts/KanjiStrokeOrders.ttf'); }
 
@@ -176,7 +176,7 @@ pre {
 
 body {
   text-align: center;
-  font-family: "Noto", "HanaMin";
+  font-family: 'Noto Sans', 'Noto Sans SC', 'Noto Sans TC', 'HanaMin', sans-serif;
   font-size: 16px;
 }
 

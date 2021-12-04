@@ -68,10 +68,10 @@ function showText(containerElement, text) {
   // <img src="hanziyan-J11022.png"/>
   // <img src='lf_24037.gif">
 
-  text = text.replace(/<img src=("|')(?!https?\:\/\/)/g, '<img src=$1collection.media/')
+  text = text.replace(/<img src=("|')(?!https?\:\/\/)/g, '<img src=$1https://srghma-chinese-files.github.io/collection.media/')
 
   // href="allsetlearning-gong1.mp3"
-  text = text.replace(/href="([^\.]+)\.mp3"/g, 'href="collection.media/$1.mp3"')
+  text = text.replace(/href="([^\.]+)\.mp3"/g, 'href="https://srghma-chinese-files.github.io/collection.media/$1.mp3"')
 
   containerElement.innerHTML = text
 
