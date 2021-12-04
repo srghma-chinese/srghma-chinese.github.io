@@ -68,15 +68,18 @@ const uniq = array => [...new Set(array)]
 function showText(containerElement, text) {
   // console.log(text)
 
-  // <img src="https://www.unicode.org/cgi-bin/refglyph?24-5DE5"
-  // <img src="asdfasdf.png"
-  // <img src="hanziyan-J11022.png"/>
-  // <img src='lf_24037.gif">
-
-  text = text.replace(/<img src=("|')(?!https?\:\/\/)/g, '<img src=$1https://srghma-chinese-files.github.io/collection.media/')
-
-  // href="allsetlearning-gong1.mp3"
-  text = text.replace(/href="([^\.]+)\.mp3"/g, 'href="https://srghma-chinese-files.github.io/collection.media/$1.mp3"')
+  if (window.location.host === 'srghma-chinese.github.io') {
+    // <img src="https://www.unicode.org/cgi-bin/refglyph?24-5DE5"
+    // <img src="asdfasdf.png"
+    // <img src="hanziyan-J11022.png"/>
+    // <img src='lf_24037.gif">
+    text = text.replace(/<img src=("|')(?!https?\:\/\/)/g, '<img src=$1https://srghma-chinese-files.github.io/collection.media/')
+    // href="allsetlearning-gong1.mp3"
+    text = text.replace(/href="([^\.]+)\.mp3"/g, 'href="https://srghma-chinese-files.github.io/collection.media/$1.mp3"')
+  } else {
+    text = text.replace(/<img src=("|')(?!https?\:\/\/)/g, '<img src=$1files/collection.media/')
+    text = text.replace(/href="([^\.]+)\.mp3"/g, 'href="files/collection.media/$1.mp3"')
+  }
 
   containerElement.innerHTML = text
 
