@@ -1,5 +1,4 @@
 const path = require('path')
-const serveStatic = require('serve-static')
 const R = require('ramda')
 
 x = require('fs').readFileSync('./anki-addon-glossary/anki-addon-glossary.json').toString()

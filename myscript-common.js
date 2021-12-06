@@ -4,10 +4,23 @@ function ruPinyinTextToArray(text) {
 
 const removeLinks = x => x.replace(/<link>[^<]*<\/link>/g, '')
 
-const asyncLoadInfoAndText = () => Promise.all([
-  fetch('files/anki.json').then(x => x.json()),
-  fetch(`ru-pinyin.txt`).then(x => x.text()),
-])
+const asyncLoadInfoAndText = () => {
+  const ruPinyinPromise = fetch(`ru-pinyin.txt`).then(x => x.text())
+
+  if (window.location.host === 'srghma-chinese.github.io') {
+    const [hanziInfo, ruPinyin] = await Promise.all([
+      fetch(`files-split/${hanzi}.json`).then(x => x.json()),
+      ruPinyinPromise,
+    ])
+    return { allHanziInfo: { [hanzi]: hanziInfo }, ruPinyin }
+  }
+
+  const [allHanziInfo, ruPinyin] = await Promise.all([
+    fetch('files/anki.json').then(x => x.json()),
+    ruPinyinPromise,
+  ])
+  return { allHanziInfo, ruPinyin }
+}
 
 function recomputeCacheAndThrowIfDuplicate(ruPinyinArray) {
   const arrayOfValuesToObject = ({ arrayOfKeysField, valueField, array }) => {
