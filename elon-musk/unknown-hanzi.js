@@ -1,10 +1,11 @@
 ;(async function() {
-  let allHanziAnkiInfo = await fetch('../anki-addon-glossary/anki-addon-glossary.json')
-  allHanziAnkiInfo = await allHanziAnkiInfo.json()
+  if (window.location.host === 'srghma-chinese.github.io') { return }
+
+  const allHanziAnkiInfo = await allHanziAnkiInfoPromise()
 
   const hanzisInfo = Array.from(document.querySelectorAll('a')).map(x => x.textContent).map(x => allHanziAnkiInfo[x]).filter(x => x)
 
-  hanziDummyInfo = hanzisInfo.map(hanziAnkiInfo => showDummyInfo({ allHanziAnkiInfo, hanzi: hanziAnkiInfo.kanji }))
+  hanziDummyInfo = hanzisInfo.map(hanziAnkiInfo => showDummyAnkiInfo({ allHanziAnkiInfo, hanzi: hanziAnkiInfo.kanji }))
   // hanziDummyInfo = await Promise.all(hanziDummyInfo)
   hanziDummyInfo = hanziDummyInfo.join('\n-----\n\n')
 

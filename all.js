@@ -52,7 +52,7 @@ const t = tag
       t("td", { class: "hanzis" },
         ...hanzi.map(hanzi => {
           return t("pre", {},
-            showDummyInfo({ allHanziAnkiInfo, hanzi })
+            showDummyAnkiInfo({ allHanziAnkiInfo, hanzi })
           )
         })
       ),

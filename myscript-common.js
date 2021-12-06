@@ -4,22 +4,44 @@ function ruPinyinTextToArray(text) {
 
 const removeLinks = x => x.replace(/<link>[^<]*<\/link>/g, '')
 
-const asyncLoadInfoAndText = () => {
-  const ruPinyinPromise = fetch(`ru-pinyin.txt`).then(x => x.text())
+const ruPinyinTextPromise = () => fetch(`/ru-pinyin.txt`).then(x => x.text())
+const hanziAnkiInfoPromise = (hanzi) => fetch(`/files-split/${hanzi}.json`).then(x => x.json())
+const allHanziAnkiInfoPromise = () => fetch(`/files/anki.json`).then(x => x.json())
+
+const asyncLoadAllAnkiInfoAndText = async (hanzi) => {
+  const [allHanziAnkiInfo, ruPinyinText] = await Promise.all([
+    allHanziAnkiInfoPromise(),
+    ruPinyinTextPromise(),
+  ])
+  return { allHanziAnkiInfo, ruPinyinText }
+}
+
+const asyncLoadHanziAnkiInfoAndText = async (hanzi) => {
+  const [hanziAnkiInfo, ruPinyinText] = await Promise.all([
+    hanziAnkiInfoPromise(hanzi),
+    ruPinyinTextPromise(),
+  ])
+  return { hanziAnkiInfo, ruPinyinText }
+}
+
+const asyncLoadHanziAnkiInfoAndAllAnkiInfoAndText = async (hanzi) => {
+  let allHanziAnkiInfo
+  let hanziAnkiInfo
+  let ruPinyinText
 
   if (window.location.host === 'srghma-chinese.github.io') {
-    const [hanziInfo, ruPinyin] = await Promise.all([
-      fetch(`files-split/${hanzi}.json`).then(x => x.json()),
-      ruPinyinPromise,
-    ])
-    return { allHanziInfo: { [hanzi]: hanziInfo }, ruPinyin }
+    const result = await asyncLoadHanziAnkiInfoAndText(hanzi)
+    hanziAnkiInfo = result.hanziAnkiInfo
+    ruPinyinText = result.ruPinyinText
+    allHanziAnkiInfo = { [hanzi]: hanziAnkiInfo }
+  } else {
+    const result = await asyncLoadAllAnkiInfoAndText()
+    allHanziAnkiInfo = result.allHanziAnkiInfo
+    ruPinyinText = result.ruPinyinText
+    hanziAnkiInfo = allHanziAnkiInfo[hanzi]
   }
 
-  const [allHanziInfo, ruPinyin] = await Promise.all([
-    fetch('files/anki.json').then(x => x.json()),
-    ruPinyinPromise,
-  ])
-  return { allHanziInfo, ruPinyin }
+  return { allHanziAnkiInfo, hanziAnkiInfo, ruPinyinText }
 }
 
 function recomputeCacheAndThrowIfDuplicate(ruPinyinArray) {
@@ -90,8 +112,8 @@ function showText(containerElement, text) {
     // href="allsetlearning-gong1.mp3"
     text = text.replace(/href="([^\.]+)\.mp3"/g, 'href="https://srghma-chinese-files.github.io/collection.media/$1.mp3"')
   } else {
-    text = text.replace(/<img src=("|')(?!https?\:\/\/)/g, '<img src=$1files/collection.media/')
-    text = text.replace(/href="([^\.]+)\.mp3"/g, 'href="files/collection.media/$1.mp3"')
+    text = text.replace(/<img src=("|')(?!https?\:\/\/)/g, '<img src=$1srghma-chinese-files/collection.media/')
+    text = text.replace(/href="([^\.]+)\.mp3"/g, 'href="srghma-chinese-files/collection.media/$1.mp3"')
   }
 
   containerElement.innerHTML = text
@@ -196,10 +218,10 @@ function strip(html) {
   return returnText
 }
 
-function showDummyInfo({ allHanziAnkiInfo, hanzi }) {
-  const hanziInfo = allHanziAnkiInfo[hanzi]
+function showDummyAnkiInfo({ allHanziAnkiInfo, hanzi }) {
+  const hanziAnkiInfo = allHanziAnkiInfo[hanzi]
 
-  if (!hanziInfo) { return hanzi }
+  if (!hanziAnkiInfo) { return hanzi }
 
   // ... -> Array String
   function matchAllFirstMatch(input, regex) {
@@ -212,7 +234,7 @@ function showDummyInfo({ allHanziAnkiInfo, hanzi }) {
     return txt.value;
   }
 
-  const rendered = parseHtmlEntities(hanziInfo.rendered)
+  const rendered = parseHtmlEntities(hanziAnkiInfo.rendered)
 
   let otherKanji = [
     matchAllFirstMatch(rendered, /Traditional in your browser[^:]+:<\/b><span class="text-lg">(.+?)<\/span>/g),
@@ -221,18 +243,18 @@ function showDummyInfo({ allHanziAnkiInfo, hanzi }) {
   ].flat().join('')
 
   otherKanji = [...otherKanji].filter(isHanzi)
-  otherKanji = uniq(otherKanji).filter(x => x !== hanziInfo.kanji)
+  otherKanji = uniq(otherKanji).filter(x => x !== hanziAnkiInfo.kanji)
 
   let mainAndOtherKanji_kanji_and_glyphPronunciations = [hanzi, ...otherKanji].map(hanzi => {
-    const hanziInfo = allHanziAnkiInfo[hanzi]
+    const hanziAnkiInfo = allHanziAnkiInfo[hanzi]
 
-    if (!hanziInfo) { return hanzi }
+    if (!hanziAnkiInfo) { return hanzi }
 
-    let glyphs = (hanziInfo.glyphs || []).map(x => (x.pinyins || [])[0]).filter(x => x).join(' + ')
-    return [hanziInfo.kanji, glyphs].filter(x => x).join(' ')
+    let glyphs = (hanziAnkiInfo.glyphs || []).map(x => (x.pinyins || [])[0]).filter(x => x).join(' + ')
+    return [hanziAnkiInfo.kanji, glyphs].filter(x => x).join(' ')
   }).filter(x => x).join('\n')
 
-  let Ru_trainchinese = hanziInfo.Ru_trainchinese || ""
+  let Ru_trainchinese = hanziAnkiInfo.Ru_trainchinese || ""
   // console.log(Ru_trainchinese)
   Ru_trainchinese = strip(Ru_trainchinese)
   // console.log(Ru_trainchinese)

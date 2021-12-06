@@ -100,7 +100,6 @@ const containerId = 'kanjiIframeContainer'
 })();
 
 ;(async function() {
-  const [allHanziAnkiInfo, ruPinyinText] = await asyncLoadInfoAndText()
 
   if (window.location.pathname.replace('.html', '') === "/h" && window.location.hash) {
     const hanziEncoded = window.location.hash.slice(1)
@@ -108,10 +107,9 @@ const containerId = 'kanjiIframeContainer'
     const hanzi = decodeURIComponent(hanziEncoded)
     if (!hanzi) { return }
 
+    const { allHanziAnkiInfo, hanziAnkiInfo, ruPinyinText } = await asyncLoadHanziAnkiInfoAndAllAnkiInfoAndText(hanzi)
 
     // console.log(hanziAnkiInfo)
-
-    const hanziAnkiInfo = allHanziAnkiInfo[hanzi]
 
     const containerElement = document.getElementById(containerId)
     if (hanziAnkiInfo) {
@@ -153,7 +151,7 @@ const containerId = 'kanjiIframeContainer'
 
     const ruPinyinPreDummyElement = document.createElement('pre')
     ruPinyinPreDummyElement.style.cssText = 'width:100%;background:rgb(192,192,192); text-align: start; color: black;'
-    ruPinyinPreDummyElement.textContent = showDummyInfo({ allHanziAnkiInfo, hanzi })
+    ruPinyinPreDummyElement.textContent = showDummyAnkiInfo({ allHanziAnkiInfo, hanzi })
     window.document.body.insertBefore(ruPinyinPreDummyElement, window.document.body.firstChild)
 
     console.log(ruPinyinObject[hanzi])

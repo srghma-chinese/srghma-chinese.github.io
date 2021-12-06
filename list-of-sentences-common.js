@@ -63,8 +63,7 @@ document.addEventListener("DOMContentLoaded", function(){
     const traditionalText = [...text].map(x => TongWen.s_2_t[x] || x).join('')
 
     ;(async function() {
-      const respose = await fetch('/list-of-known-hanzi')
-      const array = await respose.json()
+      const array = await fetch('/list-of-known-hanzi').then(x => x.json())
       const setOfKnownHanzi = new Set(array)
 
       function addLinks(text) {
